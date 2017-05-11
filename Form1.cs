@@ -235,7 +235,40 @@ namespace ChangeFilterCategory
                         {
                             SaveNewFilterCategory((PluginData)item.Tag, newCategory);
                         }
-                        selectedNode.Text = newCategory;
+
+                        int existingCategoryIndex = this.filterTreeView.Nodes.IndexOfKey(newCategory);
+                        if (existingCategoryIndex != -1)
+                        {
+                            this.filterTreeView.BeginUpdate();
+                            this.filterTreeView.Nodes.Remove(selectedNode);
+
+                            TreeNode existing = this.filterTreeView.Nodes[existingCategoryIndex];
+                            for (int i = 0; i < selectedNode.Nodes.Count; i++)
+                            {
+                                existing.Nodes.Add(selectedNode.Nodes[i]);
+                            }
+
+                            this.filterTreeView.EndUpdate();
+                        }
+                        else
+                        {
+                            this.filterTreeView.BeginUpdate();
+                            this.filterTreeView.Nodes.Remove(selectedNode);
+
+                            TreeNode node = new TreeNode(newCategory)
+                            {
+                                ContextMenuStrip = this.filterCategoryContextMenu,
+                                Name = newCategory
+                            };
+
+                            for (int i = 0; i < selectedNode.Nodes.Count; i++)
+                            {
+                                node.Nodes.Add(selectedNode.Nodes[i]);
+                            }
+
+                            this.filterTreeView.Nodes.Add(node);
+                            this.filterTreeView.EndUpdate();
+                        }
                     }
                 }
             }
