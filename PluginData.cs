@@ -1,0 +1,206 @@
+﻿/////////////////////////////////////////////////////////////////////////////////
+//
+// Change 8bf category
+//
+// This software is provided under the MIT License:
+//   Copyright (C) 2016-2017 Nicholas Hayes
+// 
+// See LICENSE.txt for complete licensing and attribution information.
+//
+/////////////////////////////////////////////////////////////////////////////////
+
+using System;
+using System.Collections.ObjectModel;
+
+namespace ChangeFilterCategory
+{
+    internal sealed class PluginData
+    {
+        private readonly string path;
+        private readonly IntPtr resourceName;
+        private readonly ushort resourceLanguage;
+        private readonly int categoryPropertyIndex;
+        private readonly string title;
+
+        private PIProperty[] properties;
+        private string category;
+        private bool dirty;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PluginData"/> class.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="resourceName">Name of the resource.</param>
+        /// <param name="resourceLanguage">The resource language.</param>
+        /// <param name="properties">The properties.</param>
+        public PluginData(string path, IntPtr resourceName, ushort resourceLanguage, PIProperty[] properties)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+
+            if (properties == null)
+            {
+                throw new ArgumentNullException(nameof(properties));
+            }
+
+            this.path = path;
+            this.resourceName = resourceName;
+            this.resourceLanguage = resourceLanguage;
+            this.properties = (PIProperty[])properties.Clone();
+
+            for (int i = 0; i < properties.Length; i++)
+            {
+                PIProperty prop = properties[i];
+                switch (prop.Key)
+                {
+                    case PIPropertyID.PICategoryProperty:
+                        this.category = PascalStringHelpers.ConvertToString(prop.GetPropertyDataReadOnly());
+                        this.categoryPropertyIndex = i;
+                        break;
+                    case PIPropertyID.PINameProperty:
+                        this.title = PascalStringHelpers.ConvertToString(prop.GetPropertyDataReadOnly());
+                        break;
+                    default:
+                        break;
+                }
+            }
+            this.dirty = false;
+        }
+
+        /// <summary>
+        /// Gets the path of the plug-in.
+        /// </summary>
+        /// <value>
+        /// The path of the plug-in.
+        /// </value>
+        public string Path
+        {
+            get
+            {
+                return this.path;
+            }
+        }
+
+        /// <summary>
+        /// Gets the resource name of the plug-in.
+        /// </summary>
+        /// <value>
+        /// The resource name of the plug-in.
+        /// </value>
+        public IntPtr ResourceName
+        {
+            get
+            {
+                return this.resourceName;
+            }
+        }
+
+        /// <summary>
+        /// Gets the resource language of the plug-in.
+        /// </summary>
+        /// <value>
+        /// The resource language of the plug-in.
+        /// </value>
+        public ushort ResourceLanguage
+        {
+            get
+            {
+                return this.resourceLanguage;
+            }
+        }
+
+        /// <summary>
+        /// Gets the properties of the plug-in.
+        /// </summary>
+        /// <value>
+        /// The properties of the plug-in.
+        /// </value>
+        public ReadOnlyCollection<PIProperty> Properties
+        {
+            get
+            {
+                return new ReadOnlyCollection<PIProperty>(this.properties);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the category of the plug-in.
+        /// </summary>
+        /// <value>
+        /// The category of the plug-in.
+        /// </value>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="value"/> exceeds the maximum length for a filter category.</exception>
+        public string Category
+        {
+            get
+            {
+                return this.category;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
+                if (!this.category.Equals(value, StringComparison.Ordinal))
+                {
+                    if (IsCategoryNameTooLong(value))
+                    {
+                        throw new ArgumentException("The specified value exceeds the maximum length for a filter category.", nameof(value));
+                    }
+
+                    this.category = value;
+                    this.properties[this.categoryPropertyIndex] = new PIProperty(PIPropertyID.PICategoryProperty, PascalStringHelpers.CreateFromString(value));
+                    this.dirty = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the title of the plug-in.
+        /// </summary>
+        /// <value>
+        /// The title of the plug-in.
+        /// </value>
+        public string Title
+        {
+            get
+            {
+                return this.title;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has unsaved changes.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance has unsaved changes; otherwise, <c>false</c>.
+        /// </value>
+        public bool Dirty
+        {
+            get
+            {
+                return this.dirty;
+            }
+            set
+            {
+                this.dirty = value;
+            }
+        }
+
+        /// <summary>
+        /// Determines whether the specified value is too long for a filter category name.
+        /// </summary>
+        /// <param name="value">The value to check.</param>
+        /// <returns><c>true</c> if the specified value too long for a filter category name; otherwise, <c>false</c>.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+        internal static bool IsCategoryNameTooLong(string value)
+        {
+            return !PascalStringHelpers.IsLengthValid(value);
+        }
+    }
+}
