@@ -269,7 +269,13 @@ namespace ChangeFilterCategory
                         }
                         else
                         {
-                            this.filterTreeView.Nodes.Add(new TreeNode(newCategory, new TreeNode[] { selectedNode }));
+                            TreeNode node = new TreeNode(newCategory, new TreeNode[] { selectedNode })
+                            {
+                                ContextMenuStrip = this.filterCategoryContextMenu,
+                                Name = newCategory,
+                            };
+
+                            this.filterTreeView.Nodes.Add(node);
                         }
 
                         this.filterTreeView.EndUpdate();
