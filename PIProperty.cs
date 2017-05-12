@@ -63,7 +63,7 @@ namespace ChangeFilterCategory
             {
                 // The Photoshop SDK states that the property data length does not include the padding bytes
                 // required to achieve four byte alignment, but some hosts depend on it being included.
-                this.propertyDataLength = (value.Length + 3) & ~3;
+                this.propertyDataLength = (value.Length + 4) & ~3;
                 this.propertyData = (byte[])value.Clone();
                 this.propertyDataPaddingLength = this.propertyDataLength - value.Length;
             }
