@@ -82,9 +82,19 @@ namespace ChangeFilterCategory
             {
                 WriteNewPIPLResource(data.Properties, resourceData, resourceSize);
 
-                if (!UnsafeNativeMethods.UpdateResourceW(hUpdateResource, "PIPL", data.ResourceName, data.ResourceLanguage, resourceData, (uint)resourceSize))
+                if (data.ResourceName.IsString)
                 {
-                    throw new Win32Exception();
+                    if (!UnsafeNativeMethods.UpdateResourceW(hUpdateResource, "PIPL", data.ResourceName.Name, data.ResourceLanguage, resourceData, (uint)resourceSize))
+                    {
+                        throw new Win32Exception();
+                    }
+                }
+                else
+                {
+                    if (!UnsafeNativeMethods.UpdateResourceW(hUpdateResource, "PIPL", (IntPtr)data.ResourceName.Ordinal, data.ResourceLanguage, resourceData, (uint)resourceSize))
+                    {
+                        throw new Win32Exception();
+                    } 
                 }
             }
             finally

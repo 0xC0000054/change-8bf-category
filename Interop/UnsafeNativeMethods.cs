@@ -70,6 +70,16 @@ namespace ChangeFilterCategory.Interop
             uint cbData);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool UpdateResourceW(
+           IntPtr hUpdate,
+           [MarshalAs(UnmanagedType.LPWStr)] string lpType,
+           [MarshalAs(UnmanagedType.LPWStr)] string lpName,
+           ushort wLanguage,
+           IntPtr lpData,
+           uint cbData);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
         internal static extern SafeFindHandle FindFirstFileExW(
                 [MarshalAs(UnmanagedType.LPWStr)] string fileName,
                 NativeEnums.FindExInfoLevel infoLevel,

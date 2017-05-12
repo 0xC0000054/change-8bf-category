@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="PIPLConstants.cs" />
     <Compile Include="Interop\SafeLibraryHandle.cs" />
+    <Compile Include="PIPLResourceName.cs" />
     <Compile Include="XmlSettings.cs" />
     <Compile Include="Interop\ShellLink.cs" />
     <Compile Include="StringLogicalComparer.cs" />

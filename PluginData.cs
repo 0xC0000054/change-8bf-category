@@ -17,7 +17,7 @@ namespace ChangeFilterCategory
     internal sealed class PluginData
     {
         private readonly string path;
-        private readonly IntPtr resourceName;
+        private readonly PIPLResourceName resourceName;
         private readonly ushort resourceLanguage;
         private readonly int categoryPropertyIndex;
         private readonly string title;
@@ -33,11 +33,16 @@ namespace ChangeFilterCategory
         /// <param name="resourceName">Name of the resource.</param>
         /// <param name="resourceLanguage">The resource language.</param>
         /// <param name="properties">The properties.</param>
-        public PluginData(string path, IntPtr resourceName, ushort resourceLanguage, PIProperty[] properties)
+        public PluginData(string path, PIPLResourceName resourceName, ushort resourceLanguage, PIProperty[] properties)
         {
             if (path == null)
             {
                 throw new ArgumentNullException(nameof(path));
+            }
+
+            if (resourceName == null)
+            {
+                throw new ArgumentNullException(nameof(resourceName));
             }
 
             if (properties == null)
@@ -89,7 +94,7 @@ namespace ChangeFilterCategory
         /// <value>
         /// The resource name of the plug-in.
         /// </value>
-        public IntPtr ResourceName
+        public PIPLResourceName ResourceName
         {
             get
             {

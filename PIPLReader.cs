@@ -149,7 +149,7 @@ namespace ChangeFilterCategory
 
                         UnsafeNativeMethods.EnumResourceLanguagesW(hModule, lpszType, lpszName, EnumResourceLanguages, new IntPtr(&language));
 
-                        data.plugins.Add(new PluginData(data.path, lpszName, language, properties));
+                        data.plugins.Add(new PluginData(data.path, GetPIPLResourceName(lpszName), language, properties));
                         handle.Target = data; 
                     }
                 }
@@ -165,6 +165,26 @@ namespace ChangeFilterCategory
 
             // Return false as there should only be one PiPL resource for a given resource id.
             return false;
+        }
+
+        private static PIPLResourceName GetPIPLResourceName(IntPtr lpszName)
+        {
+            // A Win32 resource name can be specified as an ordinal or a string.
+            if (IsIntResource(lpszName))
+            {
+                return new PIPLResourceName(lpszName.ToInt32());
+            }
+            else
+            {
+                return new PIPLResourceName(Marshal.PtrToStringUni(lpszName));
+            }
+        }
+
+        private static bool IsIntResource(IntPtr ptr)
+        {
+            const long IntResourceMask = unchecked((long)0xFFFFFFFFFFFF0000);
+
+            return ((ptr.ToInt64() & IntResourceMask) == 0);
         }
     }
 }
