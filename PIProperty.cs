@@ -59,7 +59,7 @@ namespace ChangeFilterCategory
             this.vendorID = PIPLConstants.VendorIDPhotoshop;
             this.propertyKey = key;
             this.propertyID = 0;
-            if (value != null)
+            if (value != null && value.Length > 0)
             {
                 // The Photoshop SDK states that the property data length does not include the padding bytes
                 // required to achieve four byte alignment, but some hosts depend on it being included.
