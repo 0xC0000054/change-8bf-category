@@ -240,9 +240,9 @@ namespace ChangeFilterCategory
                         if (existingCategoryIndex != -1)
                         {
                             this.filterTreeView.BeginUpdate();
-                            this.filterTreeView.Nodes.Remove(selectedNode);
-
                             TreeNode existing = this.filterTreeView.Nodes[existingCategoryIndex];
+
+                            this.filterTreeView.Nodes.Remove(selectedNode);
                             for (int i = 0; i < selectedNode.Nodes.Count; i++)
                             {
                                 existing.Nodes.Add(selectedNode.Nodes[i]);
