@@ -243,7 +243,11 @@ namespace ChangeFilterCategory
                             TreeNode existing = this.filterTreeView.Nodes[existingCategoryIndex];
 
                             this.filterTreeView.Nodes.Remove(selectedNode);
-                            for (int i = 0; i < selectedNode.Nodes.Count; i++)
+
+                            // Store the node count in a local variable to prevent an infinite loop
+                            // when the name of the existing node matches the selected node.
+                            int nodeCount = selectedNode.Nodes.Count;
+                            for (int i = 0; i < nodeCount; i++)
                             {
                                 existing.Nodes.Add(selectedNode.Nodes[i]);
                             }
