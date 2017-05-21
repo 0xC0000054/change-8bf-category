@@ -106,7 +106,7 @@ namespace ChangeFilterCategory
         {
             Dictionary<string, TreeNode> nodes = new Dictionary<string, TreeNode>(StringComparer.Ordinal);
 
-            using (FileEnumerator enumerator = new FileEnumerator((string)e.Argument, ".8bf", SearchOption.TopDirectoryOnly, true))
+            using (FileEnumerator enumerator = new FileEnumerator((string)e.Argument, ".8bf", SearchOption.AllDirectories, true))
             {
                 while (enumerator.MoveNext())
                 {
