@@ -19,7 +19,7 @@ namespace ChangeFilterCategory
         private readonly string path;
         private readonly PIPLResourceName resourceName;
         private readonly ushort resourceLanguage;
-        private readonly int categoryPropertyIndex;
+        private readonly int newCategoryIndex;
         private readonly string title;
 
         private PIProperty[] properties;
@@ -57,7 +57,7 @@ namespace ChangeFilterCategory
             // be appended to the existing properties.
             this.properties = new PIProperty[piplProperties.Length + 1];
             piplProperties.CopyTo(this.properties, 0);
-            this.categoryPropertyIndex = this.properties.Length - 1;
+            this.newCategoryIndex = this.properties.Length - 1;
 
             for (int i = 0; i < piplProperties.Length; i++)
             {
@@ -162,7 +162,7 @@ namespace ChangeFilterCategory
                     }
 
                     this.category = value;
-                    this.properties[this.categoryPropertyIndex] = new PIProperty(PIPropertyID.PICategoryProperty, PascalStringHelpers.CreateFromString(value));
+                    this.properties[this.newCategoryIndex] = new PIProperty(PIPropertyID.PICategoryProperty, PascalStringHelpers.CreateFromString(value));
                     this.dirty = true;
                 }
             }
