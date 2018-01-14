@@ -53,7 +53,11 @@ namespace ChangeFilterCategory
             this.path = path;
             this.resourceName = resourceName;
             this.resourceLanguage = resourceLanguage;
-            this.properties = (PIProperty[])piplProperties.Clone();
+            // Add one to the existing property count to allow the new category to
+            // be appended to the existing properties.
+            this.properties = new PIProperty[piplProperties.Length + 1];
+            piplProperties.CopyTo(this.properties, 0);
+            this.categoryPropertyIndex = this.properties.Length - 1;
 
             for (int i = 0; i < piplProperties.Length; i++)
             {
@@ -62,7 +66,6 @@ namespace ChangeFilterCategory
                 {
                     case PIPropertyID.PICategoryProperty:
                         this.category = PascalStringHelpers.ConvertToString(prop.GetPropertyDataReadOnly());
-                        this.categoryPropertyIndex = i;
                         break;
                     case PIPropertyID.PINameProperty:
                         this.title = PascalStringHelpers.ConvertToString(prop.GetPropertyDataReadOnly());
