@@ -32,8 +32,8 @@ namespace ChangeFilterCategory
         /// <param name="path">The path.</param>
         /// <param name="resourceName">Name of the resource.</param>
         /// <param name="resourceLanguage">The resource language.</param>
-        /// <param name="properties">The properties.</param>
-        public PluginData(string path, PIPLResourceName resourceName, ushort resourceLanguage, PIProperty[] properties)
+        /// <param name="piplProperties">The properties.</param>
+        public PluginData(string path, PIPLResourceName resourceName, ushort resourceLanguage, PIProperty[] piplProperties)
         {
             if (path == null)
             {
@@ -45,19 +45,19 @@ namespace ChangeFilterCategory
                 throw new ArgumentNullException(nameof(resourceName));
             }
 
-            if (properties == null)
+            if (piplProperties == null)
             {
-                throw new ArgumentNullException(nameof(properties));
+                throw new ArgumentNullException(nameof(piplProperties));
             }
 
             this.path = path;
             this.resourceName = resourceName;
             this.resourceLanguage = resourceLanguage;
-            this.properties = (PIProperty[])properties.Clone();
+            this.properties = (PIProperty[])piplProperties.Clone();
 
-            for (int i = 0; i < properties.Length; i++)
+            for (int i = 0; i < piplProperties.Length; i++)
             {
-                PIProperty prop = properties[i];
+                PIProperty prop = piplProperties[i];
                 switch (prop.Key)
                 {
                     case PIPropertyID.PICategoryProperty:
