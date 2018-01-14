@@ -4,7 +4,7 @@
 //
 // This software is provided under the MIT License:
 //   Copyright (C) 2016-2017 Nicholas Hayes
-// 
+//
 // See LICENSE.txt for complete licensing and attribution information.
 //
 /////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ namespace ChangeFilterCategory
 
             return Encoding.ASCII.GetString(pascalString, 1, pascalString[0]);
         }
-        
+
         /// <summary>
         /// Creates a Pascal string from the specified <see cref="string"/>.
         /// </summary>

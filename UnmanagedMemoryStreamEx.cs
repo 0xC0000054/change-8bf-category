@@ -4,7 +4,7 @@
 //
 // This software is provided under the MIT License:
 //   Copyright (C) 2016-2017 Nicholas Hayes
-// 
+//
 // See LICENSE.txt for complete licensing and attribution information.
 //
 /////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ namespace ChangeFilterCategory
             this.buffer[3] = (byte)(value >> 24);
             Write(this.buffer, 0, 4);
         }
-        
+
         /// <summary>
         /// Writes an unsigned 32 bit integer to the stream in little endian byte order.
         /// </summary>

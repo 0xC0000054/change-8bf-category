@@ -4,7 +4,7 @@
 //
 // This software is provided under the MIT License:
 //   Copyright (C) 2016-2017 Nicholas Hayes
-// 
+//
 // See LICENSE.txt for complete licensing and attribution information.
 //
 /////////////////////////////////////////////////////////////////////////////////
@@ -94,15 +94,15 @@ namespace ChangeFilterCategory
                     if (!UnsafeNativeMethods.UpdateResourceW(hUpdateResource, "PIPL", (IntPtr)data.ResourceName.Ordinal, data.ResourceLanguage, resourceData, (uint)resourceSize))
                     {
                         throw new Win32Exception();
-                    } 
+                    }
                 }
             }
             finally
             {
                 Marshal.FreeHGlobal(resourceData);
             }
-        }  
-        
+        }
+
         /// <summary>
         /// Gets the size in bytes of the PiPL resource.
         /// </summary>

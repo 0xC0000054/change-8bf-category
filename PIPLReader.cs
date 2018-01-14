@@ -4,7 +4,7 @@
 //
 // This software is provided under the MIT License:
 //   Copyright (C) 2016-2017 Nicholas Hayes
-// 
+//
 // See LICENSE.txt for complete licensing and attribution information.
 //
 /////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ namespace ChangeFilterCategory
 
             return pluginData;
         }
-       
+
         private static unsafe bool EnumPIPL(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, IntPtr lParam)
         {
             GCHandle handle = GCHandle.FromIntPtr(lParam);
@@ -150,7 +150,7 @@ namespace ChangeFilterCategory
                         UnsafeNativeMethods.EnumResourceLanguagesW(hModule, lpszType, lpszName, EnumResourceLanguages, new IntPtr(&language));
 
                         data.plugins.Add(new PluginData(data.path, GetPIPLResourceName(lpszName), language, properties));
-                        handle.Target = data; 
+                        handle.Target = data;
                     }
                 }
             }

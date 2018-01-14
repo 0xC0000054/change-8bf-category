@@ -36,9 +36,9 @@
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // okButton
-            // 
+            //
             this.okButton.Location = new System.Drawing.Point(172, 91);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(75, 23);
@@ -46,9 +46,9 @@
             this.okButton.Text = "Ok";
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
-            // 
+            //
             // cancelButton
-            // 
+            //
             this.cancelButton.CausesValidation = false;
             this.cancelButton.Location = new System.Drawing.Point(253, 91);
             this.cancelButton.Name = "cancelButton";
@@ -57,9 +57,9 @@
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-            // 
+            //
             // categoryTextBox
-            // 
+            //
             this.categoryTextBox.Location = new System.Drawing.Point(12, 40);
             this.categoryTextBox.MaxLength = 128;
             this.categoryTextBox.Name = "categoryTextBox";
@@ -67,22 +67,22 @@
             this.categoryTextBox.TabIndex = 2;
             this.categoryTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.categoryTextBox_Validating);
             this.categoryTextBox.Validated += new System.EventHandler(this.categoryTextBox_Validated);
-            // 
+            //
             // descriptionLabel
-            // 
+            //
             this.descriptionLabel.AutoSize = true;
             this.descriptionLabel.Location = new System.Drawing.Point(9, 24);
             this.descriptionLabel.Name = "descriptionLabel";
             this.descriptionLabel.Size = new System.Drawing.Size(84, 13);
             this.descriptionLabel.TabIndex = 3;
             this.descriptionLabel.Text = "descriptionLabel";
-            // 
+            //
             // errorProvider1
-            // 
+            //
             this.errorProvider1.ContainerControl = this;
-            // 
+            //
             // EditCategoryForm
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(345, 126);

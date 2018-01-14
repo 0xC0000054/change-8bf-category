@@ -10,8 +10,8 @@
 
 namespace ChangeFilterCategory.Properties {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace ChangeFilterCategory.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace ChangeFilterCategory.Properties {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,7 +59,7 @@ namespace ChangeFilterCategory.Properties {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Access to &apos;{0}&apos; is denied.
         /// </summary>
@@ -68,7 +68,7 @@ namespace ChangeFilterCategory.Properties {
                 return ResourceManager.GetString("AccessDeniedWithPath", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Enter the new category for {0}:.
         /// </summary>
@@ -77,7 +77,7 @@ namespace ChangeFilterCategory.Properties {
                 return ResourceManager.GetString("ChangeItemCategoryLabelFormat", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Change filter category.
         /// </summary>
@@ -86,7 +86,7 @@ namespace ChangeFilterCategory.Properties {
                 return ResourceManager.GetString("ChangeItemCategoryTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Could not find a part of the path &apos;{0}&apos;..
         /// </summary>
@@ -95,7 +95,7 @@ namespace ChangeFilterCategory.Properties {
                 return ResourceManager.GetString("DirectoryNotFoundWithPath", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The filter category name is too long..
         /// </summary>
@@ -104,7 +104,7 @@ namespace ChangeFilterCategory.Properties {
                 return ResourceManager.GetString("EditCategoryNameTooLongError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The filter category name must contain at least one letter or number..
         /// </summary>
@@ -113,7 +113,7 @@ namespace ChangeFilterCategory.Properties {
                 return ResourceManager.GetString("EditCategoryNullOrWhiteSpaceError", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Enter the new filter category:.
         /// </summary>
@@ -122,7 +122,7 @@ namespace ChangeFilterCategory.Properties {
                 return ResourceManager.GetString("RenameFilterCategoryLabelText", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Rename filter category.
         /// </summary>
