@@ -71,7 +71,6 @@ namespace ChangeFilterCategory
                             dll.DangerousRelease();
                         }
                     }
-
                 }
             }
 

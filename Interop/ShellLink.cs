@@ -91,8 +91,6 @@ namespace ChangeFilterCategory.Interop
                         shellLink = null;
                     }
                 }
-
-
             }
         }
     }
