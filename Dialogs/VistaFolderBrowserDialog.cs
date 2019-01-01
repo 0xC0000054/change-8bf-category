@@ -77,11 +77,11 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.title ?? string.Empty;
+                return title ?? string.Empty;
             }
             set
             {
-                this.title = value;
+                title = value;
             }
         }
 
@@ -99,11 +99,11 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.defaultFolder ?? string.Empty;
+                return defaultFolder ?? string.Empty;
             }
             set
             {
-                this.defaultFolder = value;
+                defaultFolder = value;
             }
         }
 
@@ -121,11 +121,11 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.selectedPath ?? string.Empty;
+                return selectedPath ?? string.Empty;
             }
             set
             {
-                this.selectedPath = value;
+                selectedPath = value;
             }
         }
 
@@ -143,20 +143,20 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.addToRecentDocuments;
+                return addToRecentDocuments;
             }
             set
             {
-                this.addToRecentDocuments = value;
+                addToRecentDocuments = value;
             }
         }
 
         public override void Reset()
         {
-            this.title = null;
-            this.defaultFolder = null;
-            this.selectedPath = null;
-            this.addToRecentDocuments = false;
+            title = null;
+            defaultFolder = null;
+            selectedPath = null;
+            addToRecentDocuments = false;
         }
 
         protected override bool RunDialog(IntPtr hwndOwner)
@@ -231,18 +231,18 @@ namespace ChangeFilterCategory
         {
             SetDialogOptions(dialog);
 
-            if (!string.IsNullOrEmpty(this.title))
+            if (!string.IsNullOrEmpty(title))
             {
-                dialog.SetTitle(this.title);
+                dialog.SetTitle(title);
             }
 
-            if (!string.IsNullOrEmpty(this.defaultFolder))
+            if (!string.IsNullOrEmpty(defaultFolder))
             {
                 NativeInterfaces.IShellItem defaultFolderShellItem = null;
 
                 try
                 {
-                    if (CreateShellItemFromPath(this.defaultFolder, out defaultFolderShellItem))
+                    if (CreateShellItemFromPath(defaultFolder, out defaultFolderShellItem))
                     {
                         dialog.SetDefaultFolder(defaultFolderShellItem);
                     }
@@ -257,9 +257,9 @@ namespace ChangeFilterCategory
                 }
             }
 
-            if (!string.IsNullOrEmpty(this.selectedPath))
+            if (!string.IsNullOrEmpty(selectedPath))
             {
-                dialog.SetFileName(this.selectedPath);
+                dialog.SetFileName(selectedPath);
             }
         }
 
@@ -272,7 +272,7 @@ namespace ChangeFilterCategory
             // This matches the behavior of the classic folder browser dialog which does not allow virtual folders to be selected.
             options |= NativeEnums.FOS.FOS_PICKFOLDERS | NativeEnums.FOS.FOS_FORCEFILESYSTEM;
 
-            if (!this.addToRecentDocuments)
+            if (!addToRecentDocuments)
             {
                 options |= NativeEnums.FOS.FOS_DONTADDTORECENT;
             }
@@ -296,7 +296,7 @@ namespace ChangeFilterCategory
                 string path;
                 resultShellItem.GetDisplayName(NativeEnums.SIGDN.SIGDN_FILESYSPATH, out path);
 
-                this.selectedPath = path;
+                selectedPath = path;
                 result = true;
             }
             finally
@@ -317,12 +317,12 @@ namespace ChangeFilterCategory
 
             public FolderBrowserDialogEvents(VistaFolderBrowserDialog folderDialog)
             {
-                this.dialog = folderDialog;
+                dialog = folderDialog;
             }
 
             int NativeInterfaces.IFileDialogEvents.OnFileOk(NativeInterfaces.IFileDialog pfd)
             {
-                return this.dialog.HandleFileOk(pfd) ? NativeConstants.S_OK : NativeConstants.S_FALSE;
+                return dialog.HandleFileOk(pfd) ? NativeConstants.S_OK : NativeConstants.S_FALSE;
             }
 
             int NativeInterfaces.IFileDialogEvents.OnFolderChanging(NativeInterfaces.IFileDialog pfd, NativeInterfaces.IShellItem psiFolder)

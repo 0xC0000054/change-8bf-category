@@ -38,13 +38,13 @@ namespace ChangeFilterCategory
         /// </summary>
         public PlatformFolderBrowserDialog()
         {
-            this.vistaFolderBrowserDialog = null;
-            this.classicFolderBrowserDialog = null;
-            this.classicFolderBrowserDescription = string.Empty;
-            this.vistaFolderBrowserTitle = string.Empty;
-            this.rootFolder = Environment.SpecialFolder.Desktop;
-            this.vistaFolderBrowserDefaultFolder = GetSpecialFolderPath(Environment.SpecialFolder.Desktop);
-            this.selectedPath = null;
+            vistaFolderBrowserDialog = null;
+            classicFolderBrowserDialog = null;
+            classicFolderBrowserDescription = string.Empty;
+            vistaFolderBrowserTitle = string.Empty;
+            rootFolder = Environment.SpecialFolder.Desktop;
+            vistaFolderBrowserDefaultFolder = GetSpecialFolderPath(Environment.SpecialFolder.Desktop);
+            selectedPath = null;
         }
 
         /// <summary>
@@ -61,11 +61,11 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.classicFolderBrowserDescription ?? string.Empty;
+                return classicFolderBrowserDescription ?? string.Empty;
             }
             set
             {
-                this.classicFolderBrowserDescription = value;
+                classicFolderBrowserDescription = value;
             }
         }
 
@@ -87,11 +87,11 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.vistaFolderBrowserTitle ?? string.Empty;
+                return vistaFolderBrowserTitle ?? string.Empty;
             }
             set
             {
-                this.vistaFolderBrowserTitle = value;
+                vistaFolderBrowserTitle = value;
             }
         }
 
@@ -113,7 +113,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.rootFolder;
+                return rootFolder;
             }
             set
             {
@@ -122,8 +122,8 @@ namespace ChangeFilterCategory
                     throw new InvalidEnumArgumentException("value", (int)value, typeof(Environment.SpecialFolder));
                 }
 
-                this.rootFolder = value;
-                this.vistaFolderBrowserDefaultFolder = GetSpecialFolderPath(value);
+                rootFolder = value;
+                vistaFolderBrowserDefaultFolder = GetSpecialFolderPath(value);
             }
         }
 
@@ -141,11 +141,11 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.selectedPath ?? string.Empty;
+                return selectedPath ?? string.Empty;
             }
             set
             {
-                this.selectedPath = value;
+                selectedPath = value;
             }
         }
 
@@ -171,31 +171,31 @@ namespace ChangeFilterCategory
 
             if (VistaDialogSupported())
             {
-                if (this.vistaFolderBrowserDialog == null)
+                if (vistaFolderBrowserDialog == null)
                 {
-                    this.vistaFolderBrowserDialog = new VistaFolderBrowserDialog();
+                    vistaFolderBrowserDialog = new VistaFolderBrowserDialog();
                 }
-                this.vistaFolderBrowserDialog.Title = this.vistaFolderBrowserTitle;
-                this.vistaFolderBrowserDialog.DefaultFolder = this.vistaFolderBrowserDefaultFolder;
-                this.vistaFolderBrowserDialog.SelectedPath = this.selectedPath;
+                vistaFolderBrowserDialog.Title = vistaFolderBrowserTitle;
+                vistaFolderBrowserDialog.DefaultFolder = vistaFolderBrowserDefaultFolder;
+                vistaFolderBrowserDialog.SelectedPath = selectedPath;
 
-                result = this.vistaFolderBrowserDialog.ShowDialog(owner);
+                result = vistaFolderBrowserDialog.ShowDialog(owner);
 
-                this.selectedPath = this.vistaFolderBrowserDialog.SelectedPath;
+                selectedPath = vistaFolderBrowserDialog.SelectedPath;
             }
             else
             {
-                if (this.classicFolderBrowserDialog == null)
+                if (classicFolderBrowserDialog == null)
                 {
-                    this.classicFolderBrowserDialog = new FolderBrowserDialog();
+                    classicFolderBrowserDialog = new FolderBrowserDialog();
                 }
-                this.classicFolderBrowserDialog.Description = this.classicFolderBrowserDescription;
-                this.classicFolderBrowserDialog.RootFolder = this.rootFolder;
-                this.classicFolderBrowserDialog.SelectedPath = this.selectedPath;
+                classicFolderBrowserDialog.Description = classicFolderBrowserDescription;
+                classicFolderBrowserDialog.RootFolder = rootFolder;
+                classicFolderBrowserDialog.SelectedPath = selectedPath;
 
-                result = this.classicFolderBrowserDialog.ShowDialog(owner);
+                result = classicFolderBrowserDialog.ShowDialog(owner);
 
-                this.selectedPath = this.classicFolderBrowserDialog.SelectedPath;
+                selectedPath = classicFolderBrowserDialog.SelectedPath;
             }
 
             return result;
@@ -205,15 +205,15 @@ namespace ChangeFilterCategory
         {
             if (disposing)
             {
-                if (this.vistaFolderBrowserDialog != null)
+                if (vistaFolderBrowserDialog != null)
                 {
-                    this.vistaFolderBrowserDialog.Dispose();
-                    this.vistaFolderBrowserDialog = null;
+                    vistaFolderBrowserDialog.Dispose();
+                    vistaFolderBrowserDialog = null;
                 }
-                if (this.classicFolderBrowserDialog != null)
+                if (classicFolderBrowserDialog != null)
                 {
-                    this.classicFolderBrowserDialog.Dispose();
-                    this.classicFolderBrowserDialog = null;
+                    classicFolderBrowserDialog.Dispose();
+                    classicFolderBrowserDialog = null;
                 }
             }
             base.Dispose(disposing);

@@ -55,9 +55,9 @@ namespace ChangeFilterCategory
             this.resourceLanguage = resourceLanguage;
             // Add one to the existing property count to allow the new category to
             // be appended to the existing properties.
-            this.properties = new PIProperty[piplProperties.Length + 1];
-            piplProperties.CopyTo(this.properties, 0);
-            this.newCategoryIndex = this.properties.Length - 1;
+            properties = new PIProperty[piplProperties.Length + 1];
+            piplProperties.CopyTo(properties, 0);
+            newCategoryIndex = properties.Length - 1;
 
             for (int i = 0; i < piplProperties.Length; i++)
             {
@@ -65,16 +65,16 @@ namespace ChangeFilterCategory
                 switch (prop.Key)
                 {
                     case PIPropertyID.PICategoryProperty:
-                        this.category = PascalStringHelpers.ConvertToString(prop.GetPropertyDataReadOnly());
+                        category = PascalStringHelpers.ConvertToString(prop.GetPropertyDataReadOnly());
                         break;
                     case PIPropertyID.PINameProperty:
-                        this.title = PascalStringHelpers.ConvertToString(prop.GetPropertyDataReadOnly());
+                        title = PascalStringHelpers.ConvertToString(prop.GetPropertyDataReadOnly());
                         break;
                     default:
                         break;
                 }
             }
-            this.dirty = false;
+            dirty = false;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.path;
+                return path;
             }
         }
 
@@ -101,7 +101,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.resourceName;
+                return resourceName;
             }
         }
 
@@ -115,7 +115,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.resourceLanguage;
+                return resourceLanguage;
             }
         }
 
@@ -129,7 +129,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return new ReadOnlyCollection<PIProperty>(this.properties);
+                return new ReadOnlyCollection<PIProperty>(properties);
             }
         }
 
@@ -145,7 +145,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.category;
+                return category;
             }
             set
             {
@@ -154,16 +154,16 @@ namespace ChangeFilterCategory
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                if (!this.category.Equals(value, StringComparison.Ordinal))
+                if (!category.Equals(value, StringComparison.Ordinal))
                 {
                     if (IsCategoryNameTooLong(value))
                     {
                         throw new ArgumentException("The specified value exceeds the maximum length for a filter category.", nameof(value));
                     }
 
-                    this.category = value;
-                    this.properties[this.newCategoryIndex] = new PIProperty(PIPropertyID.PICategoryProperty, PascalStringHelpers.CreateFromString(value));
-                    this.dirty = true;
+                    category = value;
+                    properties[newCategoryIndex] = new PIProperty(PIPropertyID.PICategoryProperty, PascalStringHelpers.CreateFromString(value));
+                    dirty = true;
                 }
             }
         }
@@ -178,7 +178,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.title;
+                return title;
             }
         }
 
@@ -192,11 +192,11 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.dirty;
+                return dirty;
             }
             set
             {
-                this.dirty = value;
+                dirty = value;
             }
         }
 

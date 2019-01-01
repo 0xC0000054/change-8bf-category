@@ -27,7 +27,7 @@ namespace ChangeFilterCategory
         public unsafe UnmanagedMemoryStreamEx(IntPtr address, long length, FileAccess access) :
             base((byte*)address.ToPointer(), length, length, access)
         {
-            this.buffer = new byte[4];
+            buffer = new byte[4];
         }
 
         /// <summary>
@@ -36,9 +36,9 @@ namespace ChangeFilterCategory
         /// <param name="value">The value to write.</param>
         public void WriteInt16(short value)
         {
-            this.buffer[0] = (byte)value;
-            this.buffer[1] = (byte)(value >> 8);
-            Write(this.buffer, 0, 2);
+            buffer[0] = (byte)value;
+            buffer[1] = (byte)(value >> 8);
+            Write(buffer, 0, 2);
         }
 
         /// <summary>
@@ -47,11 +47,11 @@ namespace ChangeFilterCategory
         /// <param name="value">The value to write.</param>
         public void WriteInt32(int value)
         {
-            this.buffer[0] = (byte)value;
-            this.buffer[1] = (byte)(value >> 8);
-            this.buffer[2] = (byte)(value >> 16);
-            this.buffer[3] = (byte)(value >> 24);
-            Write(this.buffer, 0, 4);
+            buffer[0] = (byte)value;
+            buffer[1] = (byte)(value >> 8);
+            buffer[2] = (byte)(value >> 16);
+            buffer[3] = (byte)(value >> 24);
+            Write(buffer, 0, 4);
         }
 
         /// <summary>
@@ -60,11 +60,11 @@ namespace ChangeFilterCategory
         /// <param name="value">The value to write.</param>
         public void WriteUInt32(uint value)
         {
-            this.buffer[0] = (byte)value;
-            this.buffer[1] = (byte)(value >> 8);
-            this.buffer[2] = (byte)(value >> 16);
-            this.buffer[3] = (byte)(value >> 24);
-            Write(this.buffer, 0, 4);
+            buffer[0] = (byte)value;
+            buffer[1] = (byte)(value >> 8);
+            buffer[2] = (byte)(value >> 16);
+            buffer[3] = (byte)(value >> 24);
+            Write(buffer, 0, 4);
         }
     }
 }

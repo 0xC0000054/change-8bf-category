@@ -23,7 +23,7 @@ namespace ChangeFilterCategory
         public PIPLResourceName(int ordinal)
         {
             this.ordinal = ordinal;
-            this.name = null;
+            name = null;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace ChangeFilterCategory
         /// <param name="name">The resource name.</param>
         public PIPLResourceName(string name)
         {
-            this.ordinal = 0;
+            ordinal = 0;
             this.name = name;
         }
 
@@ -46,7 +46,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.name != null;
+                return name != null;
             }
         }
 
@@ -60,7 +60,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.name;
+                return name;
             }
         }
 
@@ -74,7 +74,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.ordinal;
+                return ordinal;
             }
         }
     }

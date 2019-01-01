@@ -67,8 +67,8 @@ namespace ChangeFilterCategory
 					throw new ArgumentNullException(nameof(subDirectoryName));
 				}
 
-				this.path = Path.Combine(parent.path, subDirectoryName);
-				this.isShortcut = parent.isShortcut;
+				path = Path.Combine(parent.path, subDirectoryName);
+				isShortcut = parent.isShortcut;
 			}
 		}
 
@@ -146,39 +146,39 @@ namespace ChangeFilterCategory
 			string fullPath = Path.GetFullPath(path);
 			string demandPath = GetPermissionPath(fullPath, false);
 			new FileIOPermission(FileIOPermissionAccess.PathDiscovery, demandPath).Demand();
-			this.needsPathDiscoveryDemand = false;
+			needsPathDiscoveryDemand = false;
 
 			this.fileExtension = fileExtension;
 			this.searchOption = searchOption;
-			this.searchDirectories = new Queue<SearchData>();
-			this.searchData = new SearchData(fullPath, false);
+			searchDirectories = new Queue<SearchData>();
+			searchData = new SearchData(fullPath, false);
 
 			if (dereferenceLinks)
 			{
-				this.shellLink = new ShellLink();
+				shellLink = new ShellLink();
 				this.dereferenceLinks = true;
 			}
 			else
 			{
-				this.shellLink = null;
+				shellLink = null;
 				this.dereferenceLinks = false;
 			}
-			this.shellLinkTarget = null;
+			shellLinkTarget = null;
 			if (IsWindows7OrLater)
 			{
 				// Suppress the querying of short filenames and use a larger buffer on Windows 7 and later.
-				this.infoLevel = NativeEnums.FindExInfoLevel.Basic;
-				this.additionalFlags = NativeEnums.FindExAdditionalFlags.LargeFetch;
+				infoLevel = NativeEnums.FindExInfoLevel.Basic;
+				additionalFlags = NativeEnums.FindExAdditionalFlags.LargeFetch;
 			}
 			else
 			{
-				this.infoLevel = NativeEnums.FindExInfoLevel.Standard;
-				this.additionalFlags = NativeEnums.FindExAdditionalFlags.None;
+				infoLevel = NativeEnums.FindExInfoLevel.Standard;
+				additionalFlags = NativeEnums.FindExAdditionalFlags.None;
 			}
-			this.oldErrorMode = SetErrorModeWrapper(NativeConstants.SEM_FAILCRITICALERRORS);
-			this.state = -1;
-			this.current = null;
-			this.disposed = false;
+			oldErrorMode = SetErrorModeWrapper(NativeConstants.SEM_FAILCRITICALERRORS);
+			state = -1;
+			current = null;
+			disposed = false;
 			Init();
 		}
 
@@ -249,7 +249,7 @@ namespace ChangeFilterCategory
 
 		private bool FileMatchesFilter(string file)
 		{
-			return file.EndsWith(this.fileExtension, StringComparison.OrdinalIgnoreCase);
+			return file.EndsWith(fileExtension, StringComparison.OrdinalIgnoreCase);
 		}
 
 		/// <summary>
@@ -262,9 +262,9 @@ namespace ChangeFilterCategory
 			switch (win32Error)
 			{
 				case NativeConstants.ERROR_PATH_NOT_FOUND:
-					throw new DirectoryNotFoundException(string.Format(CultureInfo.CurrentCulture, Resources.DirectoryNotFoundWithPath, this.searchData.path));
+					throw new DirectoryNotFoundException(string.Format(CultureInfo.CurrentCulture, Resources.DirectoryNotFoundWithPath, searchData.path));
 				case NativeConstants.ERROR_ACCESS_DENIED:
-					throw new UnauthorizedAccessException(string.Format(CultureInfo.CurrentCulture, Resources.AccessDeniedWithPath, this.searchData.path));
+					throw new UnauthorizedAccessException(string.Format(CultureInfo.CurrentCulture, Resources.AccessDeniedWithPath, searchData.path));
 				case NativeConstants.ERROR_DIRECTORY:
 				default:
 					throw new IOException(GetWin32ErrorMessage(win32Error), MakeHRFromWin32Error(win32Error));
@@ -277,16 +277,16 @@ namespace ChangeFilterCategory
 		private void Init()
 		{
 			WIN32_FIND_DATAW findData = new WIN32_FIND_DATAW();
-			string searchPath = Path.Combine(this.searchData.path, "*");
-			this.handle = UnsafeNativeMethods.FindFirstFileExW(
+			string searchPath = Path.Combine(searchData.path, "*");
+			handle = UnsafeNativeMethods.FindFirstFileExW(
 				searchPath,
-				this.infoLevel,
+				infoLevel,
 				findData,
 				NativeEnums.FindExSearchOp.NameMatch,
 				IntPtr.Zero,
-				this.additionalFlags);
+				additionalFlags);
 
-			if (this.handle.IsInvalid)
+			if (handle.IsInvalid)
 			{
 				int error = Marshal.GetLastWin32Error();
 
@@ -298,15 +298,15 @@ namespace ChangeFilterCategory
 				{
 					// If no matching files are found exit when MoveNext is called.
 					// This may happen for an empty root directory.
-					this.state = STATE_FINISH;
+					state = STATE_FINISH;
 				}
 			}
 			else
 			{
-				this.state = STATE_INIT;
+				state = STATE_INIT;
 				if (FirstFileIncluded(findData))
 				{
-					this.current = CreateFilePath(findData);
+					current = CreateFilePath(findData);
 				}
 			}
 		}
@@ -338,9 +338,9 @@ namespace ChangeFilterCategory
 		{
 			if ((findData.dwFileAttributes & NativeConstants.FILE_ATTRIBUTE_DIRECTORY) == NativeConstants.FILE_ATTRIBUTE_DIRECTORY)
 			{
-				if (this.searchOption == SearchOption.AllDirectories && !findData.cFileName.Equals(".") && !findData.cFileName.Equals(".."))
+				if (searchOption == SearchOption.AllDirectories && !findData.cFileName.Equals(".") && !findData.cFileName.Equals(".."))
 				{
-					this.searchDirectories.Enqueue(new SearchData(this.searchData, findData.cFileName));
+					searchDirectories.Enqueue(new SearchData(searchData, findData.cFileName));
 				}
 			}
 			else
@@ -353,24 +353,24 @@ namespace ChangeFilterCategory
 
 		private bool IsFileIncluded(WIN32_FIND_DATAW findData)
 		{
-			if (findData.cFileName.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase) && this.dereferenceLinks)
+			if (findData.cFileName.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase) && dereferenceLinks)
 			{
 				// Do not search shortcuts recursively.
-				if (!this.searchData.isShortcut && this.shellLink.Load(Path.Combine(this.searchData.path, findData.cFileName)))
+				if (!searchData.isShortcut && shellLink.Load(Path.Combine(searchData.path, findData.cFileName)))
 				{
 					bool isDirectory;
-					string target = ResolveShortcutTarget(this.shellLink.Path, out isDirectory);
+					string target = ResolveShortcutTarget(shellLink.Path, out isDirectory);
 
 					if (!string.IsNullOrEmpty(target))
 					{
 						if (isDirectory)
 						{
 							// If the shortcut target is a directory, add it to the search list.
-							this.searchDirectories.Enqueue(new SearchData(target, true));
+							searchDirectories.Enqueue(new SearchData(target, true));
 						}
 						else if (FileMatchesFilter(target))
 						{
-							this.shellLinkTarget = target;
+							shellLinkTarget = target;
 							return true;
 						}
 					}
@@ -378,12 +378,12 @@ namespace ChangeFilterCategory
 			}
 			else if (FileMatchesFilter(findData.cFileName))
 			{
-				if (this.needsPathDiscoveryDemand)
+				if (needsPathDiscoveryDemand)
 				{
-					DoDemand(this.searchData.path);
-					this.needsPathDiscoveryDemand = false;
+					DoDemand(searchData.path);
+					needsPathDiscoveryDemand = false;
 				}
-				this.shellLinkTarget = null;
+				shellLinkTarget = null;
 
 				return true;
 			}
@@ -393,13 +393,13 @@ namespace ChangeFilterCategory
 
 		private string CreateFilePath(WIN32_FIND_DATAW findData)
 		{
-			if (this.shellLinkTarget != null)
+			if (shellLinkTarget != null)
 			{
-				return this.shellLinkTarget;
+				return shellLinkTarget;
 			}
 			else
 			{
-				return Path.Combine(this.searchData.path, findData.cFileName);
+				return Path.Combine(searchData.path, findData.cFileName);
 			}
 		}
 
@@ -410,7 +410,7 @@ namespace ChangeFilterCategory
 		{
 			get
 			{
-				return this.current;
+				return current;
 			}
 		}
 
@@ -419,24 +419,24 @@ namespace ChangeFilterCategory
 		/// </summary>
 		public void Dispose()
 		{
-			if (!this.disposed)
+			if (!disposed)
 			{
-				this.disposed = true;
+				disposed = true;
 
-				if (this.handle != null)
+				if (handle != null)
 				{
-					this.handle.Dispose();
-					this.handle = null;
+					handle.Dispose();
+					handle = null;
 				}
 
-				if (this.shellLink != null)
+				if (shellLink != null)
 				{
-					this.shellLink.Dispose();
-					this.shellLink = null;
+					shellLink.Dispose();
+					shellLink = null;
 				}
-				this.current = null;
-				this.state = -1;
-				SetErrorModeWrapper(this.oldErrorMode);
+				current = null;
+				state = -1;
+				SetErrorModeWrapper(oldErrorMode);
 			}
 		}
 
@@ -447,12 +447,12 @@ namespace ChangeFilterCategory
 		{
 			get
 			{
-				if (this.current == null)
+				if (current == null)
 				{
 					throw new InvalidOperationException();
 				}
 
-				return this.current;
+				return current;
 			}
 		}
 
@@ -466,12 +466,12 @@ namespace ChangeFilterCategory
 		{
 			WIN32_FIND_DATAW findData = new WIN32_FIND_DATAW();
 
-			switch (this.state)
+			switch (state)
 			{
 				case STATE_INIT:
-					this.state = STATE_FIND_FILES;
+					state = STATE_FIND_FILES;
 
-					if (this.current != null)
+					if (current != null)
 					{
 						return true;
 					}
@@ -482,66 +482,66 @@ namespace ChangeFilterCategory
 				case STATE_FIND_FILES:
 					do
 					{
-						if (this.handle == null)
+						if (handle == null)
 						{
-							this.searchData = this.searchDirectories.Dequeue();
+							searchData = searchDirectories.Dequeue();
 
-							string demandPath = GetPermissionPath(this.searchData.path, false);
+							string demandPath = GetPermissionPath(searchData.path, false);
 							new FileIOPermission(FileIOPermissionAccess.PathDiscovery, demandPath).Demand();
-							string searchPath = Path.Combine(this.searchData.path, "*");
-							this.handle = UnsafeNativeMethods.FindFirstFileExW(
+							string searchPath = Path.Combine(searchData.path, "*");
+							handle = UnsafeNativeMethods.FindFirstFileExW(
 								searchPath,
-								this.infoLevel,
+								infoLevel,
 								findData,
 								NativeEnums.FindExSearchOp.NameMatch,
 								IntPtr.Zero,
-								this.additionalFlags);
+								additionalFlags);
 
-							if (this.handle.IsInvalid)
+							if (handle.IsInvalid)
 							{
-								this.handle.Dispose();
-								this.handle = null;
+								handle.Dispose();
+								handle = null;
 
-								if (this.searchDirectories.Count > 0)
+								if (searchDirectories.Count > 0)
 								{
 									continue;
 								}
 								else
 								{
-									this.state = STATE_FINISH;
+									state = STATE_FINISH;
 									goto case STATE_FINISH;
 								}
 							}
-							this.needsPathDiscoveryDemand = true;
+							needsPathDiscoveryDemand = true;
 							if (FirstFileIncluded(findData))
 							{
-								this.current = CreateFilePath(findData);
+								current = CreateFilePath(findData);
 								return true;
 							}
 						}
 
-						while (UnsafeNativeMethods.FindNextFileW(this.handle, findData))
+						while (UnsafeNativeMethods.FindNextFileW(handle, findData))
 						{
 							if ((findData.dwFileAttributes & NativeConstants.FILE_ATTRIBUTE_DIRECTORY) == 0)
 							{
 								if (IsFileIncluded(findData))
 								{
-									this.current = CreateFilePath(findData);
+									current = CreateFilePath(findData);
 									return true;
 								}
 							}
-							else if (this.searchOption == SearchOption.AllDirectories && !findData.cFileName.Equals(".") && !findData.cFileName.Equals(".."))
+							else if (searchOption == SearchOption.AllDirectories && !findData.cFileName.Equals(".") && !findData.cFileName.Equals(".."))
 							{
-								this.searchDirectories.Enqueue(new SearchData(this.searchData, findData.cFileName));
+								searchDirectories.Enqueue(new SearchData(searchData, findData.cFileName));
 							}
 						}
 
-						this.handle.Dispose();
-						this.handle = null;
+						handle.Dispose();
+						handle = null;
 
-					} while (this.searchDirectories.Count > 0);
+					} while (searchDirectories.Count > 0);
 
-					this.state = STATE_FINISH;
+					state = STATE_FINISH;
 					goto case STATE_FINISH;
 				case STATE_FINISH:
 					Dispose();

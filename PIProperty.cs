@@ -32,21 +32,21 @@ namespace ChangeFilterCategory
         /// <param name="ptr">The pointer to the start of the property header.</param>
         public unsafe PIProperty(byte* ptr)
         {
-            this.vendorID = *(uint*)ptr;
-            this.propertyKey = *(uint*)(ptr + 4);
-            this.propertyID = *(int*)(ptr + 8);
-            this.propertyDataLength = *(int*)(ptr + 12);
-            if (this.propertyDataLength > 0)
+            vendorID = *(uint*)ptr;
+            propertyKey = *(uint*)(ptr + 4);
+            propertyID = *(int*)(ptr + 8);
+            propertyDataLength = *(int*)(ptr + 12);
+            if (propertyDataLength > 0)
             {
-                this.propertyData = new byte[this.propertyDataLength];
-                Marshal.Copy((IntPtr)(ptr + 16), this.propertyData, 0, this.propertyDataLength);
+                propertyData = new byte[propertyDataLength];
+                Marshal.Copy((IntPtr)(ptr + 16), propertyData, 0, propertyDataLength);
             }
             else
             {
-                this.propertyData = null;
+                propertyData = null;
             }
-            this.propertyDataPaddingLength = (4 - this.propertyDataLength) & 3;
-            this.totalLength = PropertyHeaderLength + this.propertyDataLength + this.propertyDataPaddingLength;
+            propertyDataPaddingLength = (4 - propertyDataLength) & 3;
+            totalLength = PropertyHeaderLength + propertyDataLength + propertyDataPaddingLength;
         }
 
         /// <summary>
@@ -56,24 +56,24 @@ namespace ChangeFilterCategory
         /// <param name="value">The byte array containing the property data.</param>
         public PIProperty(uint key, byte[] value)
         {
-            this.vendorID = PIPLConstants.VendorIDPhotoshop;
-            this.propertyKey = key;
-            this.propertyID = 0;
+            vendorID = PIPLConstants.VendorIDPhotoshop;
+            propertyKey = key;
+            propertyID = 0;
             if (value != null && value.Length > 0)
             {
                 // The Photoshop SDK states that the property data length does not include the padding bytes
                 // required to achieve four byte alignment, but some hosts depend on it being included.
-                this.propertyDataLength = (value.Length + 4) & ~3;
-                this.propertyData = (byte[])value.Clone();
-                this.propertyDataPaddingLength = this.propertyDataLength - value.Length;
+                propertyDataLength = (value.Length + 4) & ~3;
+                propertyData = (byte[])value.Clone();
+                propertyDataPaddingLength = propertyDataLength - value.Length;
             }
             else
             {
-                this.propertyDataLength = 0;
-                this.propertyData = null;
-                this.propertyDataPaddingLength = 0;
+                propertyDataLength = 0;
+                propertyData = null;
+                propertyDataPaddingLength = 0;
             }
-            this.totalLength = PropertyHeaderLength + this.propertyDataLength;
+            totalLength = PropertyHeaderLength + propertyDataLength;
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.propertyKey;
+                return propertyKey;
             }
         }
 
@@ -100,7 +100,7 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.totalLength;
+                return totalLength;
             }
         }
 
@@ -112,7 +112,7 @@ namespace ChangeFilterCategory
         /// </returns>
         public byte[] GetPropertyDataReadOnly()
         {
-            return this.propertyData;
+            return propertyData;
         }
 
         /// <summary>
@@ -127,18 +127,18 @@ namespace ChangeFilterCategory
                 throw new ArgumentNullException(nameof(stream));
             }
 
-            stream.WriteUInt32(this.vendorID);
-            stream.WriteUInt32(this.propertyKey);
-            stream.WriteInt32(this.propertyID);
-            stream.WriteInt32(this.propertyDataLength);
+            stream.WriteUInt32(vendorID);
+            stream.WriteUInt32(propertyKey);
+            stream.WriteInt32(propertyID);
+            stream.WriteInt32(propertyDataLength);
 
-            if (this.propertyData != null)
+            if (propertyData != null)
             {
-                stream.Write(this.propertyData, 0, this.propertyData.Length);
-                if (this.propertyDataPaddingLength > 0)
+                stream.Write(propertyData, 0, propertyData.Length);
+                if (propertyDataPaddingLength > 0)
                 {
-                    byte[] padding = new byte[this.propertyDataPaddingLength];
-                    stream.Write(padding, 0, this.propertyDataPaddingLength);
+                    byte[] padding = new byte[propertyDataPaddingLength];
+                    stream.Write(padding, 0, propertyDataPaddingLength);
                 }
             }
         }

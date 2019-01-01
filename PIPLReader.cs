@@ -26,7 +26,7 @@ namespace ChangeFilterCategory
             public QueryPlugin(string path)
             {
                 this.path = path;
-                this.plugins = new List<PluginData>();
+                plugins = new List<PluginData>();
             }
         }
 

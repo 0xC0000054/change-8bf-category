@@ -28,8 +28,8 @@ namespace ChangeFilterCategory.Interop
         /// </summary>
         public ShellLink()
         {
-            this.shellLink = new NativeInterfaces.NativeShellLink();
-            this.disposed = false;
+            shellLink = new NativeInterfaces.NativeShellLink();
+            disposed = false;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace ChangeFilterCategory.Interop
         /// <param name="linkPath">The shortcut to load.</param>
         public bool Load(string linkPath)
         {
-            return ((NativeInterfaces.IPersistFile)this.shellLink).Load(linkPath, NativeConstants.STGM_READ) == NativeConstants.S_OK;
+            return ((NativeInterfaces.IPersistFile)shellLink).Load(linkPath, NativeConstants.STGM_READ) == NativeConstants.S_OK;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace ChangeFilterCategory.Interop
             {
                 StringBuilder sb = new StringBuilder(NativeConstants.MAX_PATH);
 
-                if (this.shellLink.GetPath(sb, sb.MaxCapacity, IntPtr.Zero, 0U) != NativeConstants.S_OK)
+                if (shellLink.GetPath(sb, sb.MaxCapacity, IntPtr.Zero, 0U) != NativeConstants.S_OK)
                 {
                     return string.Empty;
                 }
@@ -85,10 +85,10 @@ namespace ChangeFilterCategory.Interop
 
                 if (disposing)
                 {
-                    if (this.shellLink != null)
+                    if (shellLink != null)
                     {
-                        Marshal.ReleaseComObject(this.shellLink);
-                        this.shellLink = null;
+                        Marshal.ReleaseComObject(shellLink);
+                        shellLink = null;
                     }
                 }
 

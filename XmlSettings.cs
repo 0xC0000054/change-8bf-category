@@ -23,7 +23,7 @@ namespace ChangeFilterCategory
         /// </summary>
         public XmlSettings()
         {
-            this.LastPluginDirectory = null;
+            LastPluginDirectory = null;
         }
 
         /// <summary>

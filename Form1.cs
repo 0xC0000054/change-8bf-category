@@ -29,8 +29,8 @@ namespace ChangeFilterCategory
         public Form1()
         {
             InitializeComponent();
-            this.fileNameLabel.Text = string.Empty;
-            this.xmlSettings = new XmlSettings();
+            fileNameLabel.Text = string.Empty;
+            xmlSettings = new XmlSettings();
         }
 
         protected override void OnShown(EventArgs e)
@@ -42,7 +42,7 @@ namespace ChangeFilterCategory
 
         private void ShowErrorMessage(string message)
         {
-            MessageBox.Show(this, message, this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
+            MessageBox.Show(this, message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
         }
 
         private void LoadSettings()
@@ -52,10 +52,10 @@ namespace ChangeFilterCategory
                 using (FileStream stream = new FileStream(SettingsPath, FileMode.Open, FileAccess.Read))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(XmlSettings));
-                    this.xmlSettings = (XmlSettings)serializer.Deserialize(stream);
+                    xmlSettings = (XmlSettings)serializer.Deserialize(stream);
                 }
 
-                this.folderBrowserDialog.SelectedPath = this.xmlSettings.LastPluginDirectory;
+                folderBrowserDialog.SelectedPath = xmlSettings.LastPluginDirectory;
             }
             catch (IOException ex)
             {
@@ -74,7 +74,7 @@ namespace ChangeFilterCategory
                 using (FileStream fs = new FileStream(SettingsPath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(XmlSettings));
-                    serializer.Serialize(fs, this.xmlSettings);
+                    serializer.Serialize(fs, xmlSettings);
                 }
             }
             catch (IOException ex)
@@ -89,16 +89,16 @@ namespace ChangeFilterCategory
 
         private void loadFilterButton_Click(object sender, EventArgs e)
         {
-            if (this.folderBrowserDialog.ShowDialog(this) == DialogResult.OK)
+            if (folderBrowserDialog.ShowDialog(this) == DialogResult.OK)
             {
-                string selectedPath = this.folderBrowserDialog.SelectedPath;
+                string selectedPath = folderBrowserDialog.SelectedPath;
 
-                this.xmlSettings.LastPluginDirectory = selectedPath;
+                xmlSettings.LastPluginDirectory = selectedPath;
                 SaveSettings();
 
-                this.filterTreeView.Nodes.Clear();
-                this.UseWaitCursor = true;
-                this.filterSearchWorker.RunWorkerAsync(selectedPath);
+                filterTreeView.Nodes.Clear();
+                UseWaitCursor = true;
+                filterSearchWorker.RunWorkerAsync(selectedPath);
             }
         }
 
@@ -117,7 +117,7 @@ namespace ChangeFilterCategory
                         {
                             TreeNode child = new TreeNode(plugin.Title)
                             {
-                                ContextMenuStrip = this.filterItemContextMenu,
+                                ContextMenuStrip = filterItemContextMenu,
                                 Name = plugin.Title,
                                 Tag = plugin
                             };
@@ -131,7 +131,7 @@ namespace ChangeFilterCategory
                             {
                                 TreeNode node = new TreeNode(plugin.Category, new TreeNode[] { child })
                                 {
-                                    ContextMenuStrip = this.filterCategoryContextMenu,
+                                    ContextMenuStrip = filterCategoryContextMenu,
                                     Name = plugin.Category,
                                 };
 
@@ -156,67 +156,67 @@ namespace ChangeFilterCategory
             }
             else
             {
-                this.filterTreeView.BeginUpdate();
+                filterTreeView.BeginUpdate();
 
-                this.filterTreeView.TreeViewNodeSorter = null;
-                this.filterTreeView.Nodes.AddRange((TreeNode[])e.Result);
-                this.filterTreeView.TreeViewNodeSorter = new TreeNodeItemComparer();
+                filterTreeView.TreeViewNodeSorter = null;
+                filterTreeView.Nodes.AddRange((TreeNode[])e.Result);
+                filterTreeView.TreeViewNodeSorter = new TreeNodeItemComparer();
 
                 // Add and remove a dummy item to force the TreeView to update the item size calculations.
                 // This fixes a bug with the TreeView clipping the text of the last root node.
-                int dummyIndex = this.filterTreeView.Nodes.Add(new TreeNode());
-                this.filterTreeView.Nodes.RemoveAt(dummyIndex);
+                int dummyIndex = filterTreeView.Nodes.Add(new TreeNode());
+                filterTreeView.Nodes.RemoveAt(dummyIndex);
 
-                this.filterTreeView.EndUpdate();
+                filterTreeView.EndUpdate();
             }
-            this.UseWaitCursor = false;
+            UseWaitCursor = false;
         }
 
         private void filterTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (e.Node.Tag != null)
             {
-                this.fileNameLabel.Text = Path.GetFileName(((PluginData)e.Node.Tag).Path);
+                fileNameLabel.Text = Path.GetFileName(((PluginData)e.Node.Tag).Path);
             }
             else
             {
-                this.fileNameLabel.Text = string.Empty;
+                fileNameLabel.Text = string.Empty;
             }
         }
 
         private void filterTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            this.editCategoryButton.Enabled = true;
-            this.contextMenuTreeNode = e.Node;
+            editCategoryButton.Enabled = true;
+            contextMenuTreeNode = e.Node;
         }
 
         private void renameCategoryMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.contextMenuTreeNode != null)
+            if (contextMenuTreeNode != null)
             {
-                RenameCategory(this.contextMenuTreeNode);
+                RenameCategory(contextMenuTreeNode);
             }
         }
 
         private void changeCategoryMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.contextMenuTreeNode != null)
+            if (contextMenuTreeNode != null)
             {
-                ChangeItemCategory(this.contextMenuTreeNode);
+                ChangeItemCategory(contextMenuTreeNode);
             }
         }
 
         private void editCategoryButton_Click(object sender, EventArgs e)
         {
-            if (this.filterTreeView.SelectedNode != null)
+            if (filterTreeView.SelectedNode != null)
             {
-                if (this.filterTreeView.SelectedNode.Tag != null)
+                if (filterTreeView.SelectedNode.Tag != null)
                 {
-                    ChangeItemCategory(this.filterTreeView.SelectedNode);
+                    ChangeItemCategory(filterTreeView.SelectedNode);
                 }
                 else
                 {
-                    RenameCategory(this.filterTreeView.SelectedNode);
+                    RenameCategory(filterTreeView.SelectedNode);
                 }
             }
         }
@@ -236,13 +236,13 @@ namespace ChangeFilterCategory
                             SaveNewFilterCategory((PluginData)item.Tag, newCategory);
                         }
 
-                        int existingCategoryIndex = this.filterTreeView.Nodes.IndexOfKey(newCategory);
+                        int existingCategoryIndex = filterTreeView.Nodes.IndexOfKey(newCategory);
                         if (existingCategoryIndex != -1)
                         {
-                            this.filterTreeView.BeginUpdate();
-                            TreeNode existing = this.filterTreeView.Nodes[existingCategoryIndex];
+                            filterTreeView.BeginUpdate();
+                            TreeNode existing = filterTreeView.Nodes[existingCategoryIndex];
 
-                            this.filterTreeView.Nodes.Remove(selectedNode);
+                            filterTreeView.Nodes.Remove(selectedNode);
 
                             // Store the node count in a local variable to prevent an infinite loop
                             // when the name of the existing node matches the selected node.
@@ -252,16 +252,16 @@ namespace ChangeFilterCategory
                                 existing.Nodes.Add(selectedNode.Nodes[i]);
                             }
 
-                            this.filterTreeView.EndUpdate();
+                            filterTreeView.EndUpdate();
                         }
                         else
                         {
-                            this.filterTreeView.BeginUpdate();
-                            this.filterTreeView.Nodes.Remove(selectedNode);
+                            filterTreeView.BeginUpdate();
+                            filterTreeView.Nodes.Remove(selectedNode);
 
                             TreeNode node = new TreeNode(newCategory)
                             {
-                                ContextMenuStrip = this.filterCategoryContextMenu,
+                                ContextMenuStrip = filterCategoryContextMenu,
                                 Name = newCategory
                             };
 
@@ -270,8 +270,8 @@ namespace ChangeFilterCategory
                                 node.Nodes.Add(selectedNode.Nodes[i]);
                             }
 
-                            this.filterTreeView.Nodes.Add(node);
-                            this.filterTreeView.EndUpdate();
+                            filterTreeView.Nodes.Add(node);
+                            filterTreeView.EndUpdate();
                         }
                     }
                 }
@@ -291,31 +291,31 @@ namespace ChangeFilterCategory
                     {
                         SaveNewFilterCategory(data, newCategory);
 
-                        this.filterTreeView.BeginUpdate();
+                        filterTreeView.BeginUpdate();
 
                         TreeNode parent = selectedNode.Parent;
                         parent.Nodes.Remove(selectedNode);
                         if (parent.Nodes.Count == 0)
                         {
-                            this.filterTreeView.Nodes.Remove(parent);
+                            filterTreeView.Nodes.Remove(parent);
                         }
 
-                        if (this.filterTreeView.Nodes.ContainsKey(newCategory))
+                        if (filterTreeView.Nodes.ContainsKey(newCategory))
                         {
-                            this.filterTreeView.Nodes[newCategory].Nodes.Add(selectedNode);
+                            filterTreeView.Nodes[newCategory].Nodes.Add(selectedNode);
                         }
                         else
                         {
                             TreeNode node = new TreeNode(newCategory, new TreeNode[] { selectedNode })
                             {
-                                ContextMenuStrip = this.filterCategoryContextMenu,
+                                ContextMenuStrip = filterCategoryContextMenu,
                                 Name = newCategory,
                             };
 
-                            this.filterTreeView.Nodes.Add(node);
+                            filterTreeView.Nodes.Add(node);
                         }
 
-                        this.filterTreeView.EndUpdate();
+                        filterTreeView.EndUpdate();
                     }
                 }
             }

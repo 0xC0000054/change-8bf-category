@@ -36,15 +36,15 @@ namespace ChangeFilterCategory
         public EditCategoryForm(string caption, string category, string filterTitle)
         {
             InitializeComponent();
-            this.Text = caption;
-            this.categoryTextBox.Text = category;
+            Text = caption;
+            categoryTextBox.Text = category;
             if (!string.IsNullOrEmpty(filterTitle))
             {
-                this.descriptionLabel.Text = string.Format(CultureInfo.CurrentCulture, Resources.ChangeItemCategoryLabelFormat, filterTitle.TrimEnd('.'));
+                descriptionLabel.Text = string.Format(CultureInfo.CurrentCulture, Resources.ChangeItemCategoryLabelFormat, filterTitle.TrimEnd('.'));
             }
             else
             {
-                this.descriptionLabel.Text = Resources.RenameFilterCategoryLabelText;
+                descriptionLabel.Text = Resources.RenameFilterCategoryLabelText;
             }
         }
 
@@ -58,34 +58,34 @@ namespace ChangeFilterCategory
         {
             get
             {
-                return this.categoryTextBox.Text;
+                return categoryTextBox.Text;
             }
         }
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
             Close();
         }
 
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
+            DialogResult = DialogResult.Cancel;
             Close();
         }
 
         private void categoryTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            string text = this.categoryTextBox.Text;
+            string text = categoryTextBox.Text;
 
             if (StringUtil.IsNullOrWhiteSpace(text))
             {
-                this.errorProvider1.SetError(this.categoryTextBox, Resources.EditCategoryNullOrWhiteSpaceError);
+                errorProvider1.SetError(categoryTextBox, Resources.EditCategoryNullOrWhiteSpaceError);
                 e.Cancel = true;
             }
             else if (PluginData.IsCategoryNameTooLong(text))
             {
-                this.errorProvider1.SetError(this.categoryTextBox, Resources.EditCategoryNameTooLongError);
+                errorProvider1.SetError(categoryTextBox, Resources.EditCategoryNameTooLongError);
                 e.Cancel = true;
             }
         }
@@ -93,7 +93,7 @@ namespace ChangeFilterCategory
         private void categoryTextBox_Validated(object sender, EventArgs e)
         {
             // If all conditions have been met, clear the ErrorProvider of errors.
-            this.errorProvider1.SetError(categoryTextBox, string.Empty);
+            errorProvider1.SetError(categoryTextBox, string.Empty);
         }
     }
 }
