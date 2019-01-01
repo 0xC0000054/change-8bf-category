@@ -78,7 +78,7 @@ namespace ChangeFilterCategory
 		{
 			OperatingSystem os = Environment.OSVersion;
 
-			return (os.Platform == PlatformID.Win32NT && ((os.Version.Major == 6 && os.Version.Minor >= 1) || os.Version.Major > 6));
+			return os.Platform == PlatformID.Win32NT && ((os.Version.Major == 6 && os.Version.Minor >= 1) || os.Version.Major > 6);
 		}
 
 		private const int STATE_INIT = 0;

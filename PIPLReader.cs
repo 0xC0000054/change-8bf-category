@@ -184,7 +184,7 @@ namespace ChangeFilterCategory
         {
             const long IntResourceMask = unchecked((long)0xFFFFFFFFFFFF0000);
 
-            return ((ptr.ToInt64() & IntResourceMask) == 0);
+            return (ptr.ToInt64() & IntResourceMask) == 0;
         }
     }
 }

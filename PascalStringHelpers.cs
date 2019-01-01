@@ -89,7 +89,7 @@ namespace ChangeFilterCategory
 
             int byteCount = Encoding.ASCII.GetByteCount(value);
 
-            return (byteCount >= 0 && byteCount <= MaxPascalStringLength);
+            return byteCount >= 0 && byteCount <= MaxPascalStringLength;
         }
     }
 }
