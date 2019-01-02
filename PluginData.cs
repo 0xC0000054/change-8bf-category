@@ -70,8 +70,6 @@ namespace ChangeFilterCategory
                     case PIPropertyID.PINameProperty:
                         title = PascalStringHelpers.ConvertToString(prop.GetPropertyDataReadOnly());
                         break;
-                    default:
-                        break;
                 }
             }
             dirty = false;
