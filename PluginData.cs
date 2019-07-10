@@ -53,9 +53,16 @@ namespace ChangeFilterCategory
             this.path = path;
             this.resourceName = resourceName;
             this.resourceLanguage = resourceLanguage;
-            // Add one to the existing property count to allow the new category to
-            // be appended to the existing properties.
-            properties = new PIProperty[piplProperties.Length + 1];
+
+            int propertyArrayLength = piplProperties.Length;
+
+            if (piplProperties[propertyArrayLength - 1].Key != PIPropertyID.PICategoryProperty)
+            {
+                // Reserve space for a new category property at the end of the array.
+                propertyArrayLength++;
+            }
+
+            properties = new PIProperty[propertyArrayLength];
             piplProperties.CopyTo(properties, 0);
             newCategoryIndex = properties.Length - 1;
 
