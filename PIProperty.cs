@@ -10,10 +10,12 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace ChangeFilterCategory
 {
+    [DebuggerDisplay("{DebuggerDisplay,nq}")]
     internal sealed class PIProperty
     {
         private const int PropertyHeaderLength = 16;
@@ -101,6 +103,28 @@ namespace ChangeFilterCategory
             get
             {
                 return totalLength;
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private string DebuggerDisplay
+        {
+            get
+            {
+                string propertyKeyName = new string(new char[]
+                                                     {
+                                                         (char)((propertyKey >> 24) & 0x000000ff),
+                                                         (char)((propertyKey >> 16) & 0x000000ff),
+                                                         (char)((propertyKey >> 8) & 0x000000ff),
+                                                         (char)(propertyKey & 0x000000ff)
+                                                     });
+
+                return string.Format(
+                    System.Globalization.CultureInfo.InvariantCulture,
+                    "Key='{0}', Length={1}, TotalLength={2}",
+                    propertyKeyName,
+                    propertyDataLength,
+                    totalLength);
             }
         }
 
